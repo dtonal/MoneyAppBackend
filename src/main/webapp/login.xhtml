@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Login Page</title>
+	<link type="text/css"
+		href="${facesContext.externalContext.requestContextPath}/resources/css/style.css"
+		rel="stylesheet" />
+	<link type="image/x-icon"
+		href="${facesContext.externalContext.requestContextPath}/resources/images/favicon.ico"
+		rel="shortcut icon" />
+</h:head>
+<h:body>
+
+	<h:form id="loginForm">
+		<b:growl id="msg" showDetail="true" life="4000" />
+
+		<b:panel id="loginPnl" header="Login"
+			style="width: 350px; margin: 0 auto;">
+
+			<div id="message">
+				<p:ajaxStatus style="display:block;  margin-top:.5em; margin-bottom:.5em;">
+					<f:facet name="default">
+						<h:outputText value="Please enter your credentials." />
+					</f:facet>
+					<f:facet name="start">
+						<h:outputText
+							value="Please wait #{loginBean.email}, Connecting database..." />
+					</f:facet>
+					<f:facet name="complete">
+						<h:outputText value="Please try again!" />
+					</f:facet>
+				</p:ajaxStatus>
+			</div>
+
+			<b:inputText id="email" value="#{loginController.email}"
+				requiredMessage="Please enter your email address."
+				validatorMessage="Invalid email format" required="true"
+				label="Email">
+				<f:validateRegex
+					pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+			</b:inputText>
+
+			<b:inputSecret id="passwordDiv" fieldId="j_password"
+				name="j_password" value="#{loginController.pwd}" label="Password" />
+
+			<b:commandButton id="loginButton"
+				action="#{loginController.validateUsernamePassword}" value="Login"
+				update="loginForm" ajax="true" style="float: right;">
+			</b:commandButton>
+		</b:panel>
+		<p:blockUI block="loginPnl" trigger="loginButton" style="float:right;">
+			<b:image value="resources/images/loader.gif" />
+		</p:blockUI>
+	</h:form>
+</h:body>
+</html>
